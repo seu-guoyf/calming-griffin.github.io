@@ -3,350 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Griffin's Cloud Dashboard</title>
+    <title>我的主页</title>
     <style>
-        /* ============ 样式区 ============ */
-        :root { 
-            --bg: #1a1a1a; 
-            --card: #2d2d2d; 
-            --text: #e0e0e0; 
-            --accent: #4CAF50; 
-            --del: #ff4444; 
+        :root {
+            --bg-color: #1a1a1a;       /* 背景深灰 */
+            --card-bg: #2d2d2d;        /* 卡片浅灰 */
+            --text-color: #e0e0e0;     /* 文字银白 */
+            --accent-color: #4CAF50;   /* 强调色绿色 */
+            --hover-bg: #383838;       /* 悬停高亮 */
         }
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding-top: 60px; 
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* 1. 时钟样式 */
+        #clock {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: default;
+        }
+
+        /* 2. 搜索框样式 (默认Google) */
+        .search-container {
+            margin-bottom: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
         
-        /* 时钟 */
-        #clock { 
-            font-size: 4rem; 
-            font-weight: 700; 
-            margin-bottom: 30px; 
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(0,0,0,0.5);
+        input[type="text"] {
+            padding: 15px 25px;
+            width: 300px;
+            max-width: 80%;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            background: var(--card-bg);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            text-align: center;
         }
 
-        /* 网格布局 */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
-            gap: 20px; 
-            width: 85%; 
-            max-width: 900px; 
+        input[type="text"]:focus {
+            width: 450px;
+            background: #333;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
         }
 
-        /* 卡片样式 */
-        .card { 
-            background: var(--card); 
-            padding: 20px 10px; 
-            border-radius: 12px; 
-            text-align: center; 
-            text-decoration: none; 
-            color: var(--text); 
-            position: relative; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            height: 90px; 
-            transition: all 0.2s ease; 
+        /* 3. 网站图标网格 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3列布局 */
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* 手机端适配：变2列 */
+        @media (max-width: 600px) {
+            .grid-container { grid-template-columns: repeat(2, 1fr); }
+            #clock { font-size: 2.5rem; }
+        }
+
+        /* 单个卡片 */
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background 0.2s;
+            height: 80px; /* 固定高度 */
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .card:hover { 
-            transform: translateY(-5px); 
-            background: #383838; 
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+
+        .card:hover {
+            transform: translateY(-5px);
+            background-color: var(--hover-bg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        .icon { font-size: 28px; margin-bottom: 8px; }
-        .name { font-size: 14px; font-weight: 500; }
+        .icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
 
-        /* 删除按钮 */
-        .del-btn { 
-            position: absolute; 
-            top: -8px; 
-            right: -8px; 
-            background: var(--del); 
-            color: white; 
-            width: 24px; 
-            height: 24px; 
-            border-radius: 50%; 
-            border: 2px solid var(--bg);
-            cursor: pointer; 
-            display: none; 
-            align-items: center; 
-            justify-content: center;
-            font-weight: bold;
+        .title {
+            font-size: 14px;
+            font-weight: 500;
         }
-        .card:hover .del-btn { display: flex; }
-
-        /* 添加按钮 */
-        .add-btn { 
-            border: 2px dashed #555; 
-            background: transparent; 
-            box-shadow: none;
-            cursor: pointer; 
-        }
-        .add-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-        /* 弹窗通用 */
-        .modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.7); 
-            backdrop-filter: blur(5px);
-            align-items: center; justify-content: center; 
-            z-index: 1000; 
-        }
-        .modal-content { 
-            background: #333; 
-            padding: 25px; 
-            border-radius: 15px; 
-            width: 320px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .modal h3 { margin: 0 0 10px 0; color: white; }
-        input { 
-            padding: 10px; 
-            background: #444; 
-            border: 1px solid #555; 
-            color: white; 
-            border-radius: 6px; 
-            outline: none;
-        }
-        input:focus { border-color: var(--accent); }
-        
-        .btn-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
-        button { padding: 8px 20px; cursor: pointer; border: none; border-radius: 6px; font-weight: bold; }
-        .btn-cancel { background: #555; color: #ccc; }
-        .btn-save { background: var(--accent); color: white; }
-        .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* 设置齿轮 */
-        #settings-btn { 
-            position: fixed; 
-            bottom: 25px; 
-            right: 25px; 
-            opacity: 0.2; 
-            cursor: pointer; 
-            font-size: 24px; 
-            transition: 0.3s;
-        }
-        #settings-btn:hover { opacity: 1; transform: rotate(90deg); }
     </style>
 </head>
 <body>
 
     <div id="clock">00:00</div>
-    <div class="grid" id="grid"></div>
 
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <h3>添加新导航</h3>
-            <input id="iName" placeholder="网站名称 (如: Google)">
-            <input id="iUrl" placeholder="网址 (如: google.com)">
-            <input id="iIcon" placeholder="图标Emoji (如: 🔍)">
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeModal()">取消</button>
-                <button class="btn-save" onclick="commitLink()">保存同步</button>
-            </div>
-        </div>
+    <div class="search-container">
+        <form action="https://www.google.com/search" method="get" target="_blank">
+            <input type="text" name="q" placeholder="Google Search..." autocomplete="off" autofocus>
+        </form>
     </div>
 
-    <div class="modal" id="tokenModal">
-        <div class="modal-content">
-            <h3>⚙️ 权限设置</h3>
-            <p style="font-size:13px; color:#aaa; margin:0;">
-                请输入 GitHub Personal Access Token 以启用云端同步写入功能。Token 仅保存在本地。
-            </p>
-            <input id="iToken" type="password" placeholder="ghp_xxxxxxxxxxxxxx">
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeTokenModal()">关闭</button>
-                <button class="btn-save" onclick="saveToken()">保存配置</button>
-            </div>
-        </div>
-    </div>
+    <div class="grid-container">
 
-    <div id="settings-btn" onclick="openTokenModal()">⚙️</div>
+        <a href="https://gemini.google.com" class="card" target="_blank">
+            <div class="icon">✨</div>
+            <div class="title">Gemini</div>
+        </a>
+
+        <a href="https://www.google.com" class="card" target="_blank">
+            <div class="icon">🌈</div>
+            <div class="title">Google</div>
+        </a>
+
+        <a href="https://www.bing.com" class="card" target="_blank">
+            <div class="icon">🟦</div>
+            <div class="title">Bing</div>
+        </a>
+
+        <a href="https://trustmlatseu.github.io/" class="card" target="_blank">
+            <div class="icon">🎓</div>
+            <div class="title">TrustML 组会</div>
+        </a>
+
+        <a href="https://www.bilibili.com" class="card" target="_blank">
+            <div class="icon">📺</div>
+            <div class="title">Bilibili</div>
+        </a>
+
+        <a href="https://www.zhihu.com" class="card" target="_blank">
+            <div class="icon">📖</div>
+            <div class="title">知乎</div>
+        </a>
+
+    </div>
 
     <script>
-        // ============ 核心配置 ============
-        const CONFIG = {
-            owner: 'calming-Griffin',        // 你的 GitHub 用户名
-            repo: 'calming-griffin.github.io', // 你的仓库名（全小写）
-            path: 'data.json'                // 数据文件名
-        };
-        // =================================
-
-        let links = [];
-        let fileSha = ''; 
-
-        // 1. 初始化：读取 GitHub 数据
-        async function loadData() {
-            // 加时间戳防止缓存
-            const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}?t=${new Date().getTime()}`;
-            
-            try {
-                const res = await fetch(url);
-                if (!res.ok) throw new Error('File not found');
-                
-                const data = await res.json();
-                
-                // 解码 Content (Base64 -> UTF-8)
-                const content = decodeURIComponent(escape(atob(data.content)));
-                
-                links = JSON.parse(content);
-                fileSha = data.sha; // 记录 SHA 用于下次写入
-                render();
-                
-            } catch (e) {
-                console.warn('读取失败或文件不存在，加载默认数据', e);
-                // 如果第一次使用（文件不存在），给一些默认值
-                links = [
-                    {name: "GitHub", url: "https://github.com", icon: "🐙"},
-                    {name: "Google", url: "https://google.com", icon: "🔍"}
-                ];
-                render();
-            }
+        // 简单的时钟逻辑
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
         }
-
-        // 2. 渲染界面
-        function render() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = ''; // 清空
-            
-            // 循环生成卡片
-            links.forEach((link, idx) => {
-                grid.innerHTML += `
-                    <a href="${link.url}" class="card">
-                        <button class="del-btn" onclick="deleteLink(event, ${idx})">×</button>
-                        <div class="icon">${link.icon}</div>
-                        <div class="name">${link.name}</div>
-                    </a>
-                `;
-            });
-            
-            // 添加按钮
-            grid.innerHTML += `
-                <div class="card add-btn" onclick="openModal()">
-                    <div class="icon">➕</div>
-                </div>
-            `;
-        }
-
-        // 3. 提交到 GitHub (Add / Delete)
-        async function updateGithub(newLinks, message) {
-            const token = localStorage.getItem('gh_token');
-            if (!token) {
-                alert('请先点击右下角齿轮⚙️，设置 GitHub Token！');
-                openTokenModal();
-                return;
-            }
-
-            // 按钮变更为“同步中”
-            const btns = document.querySelectorAll('.btn-save');
-            btns.forEach(b => { b.innerText = '同步中...'; b.disabled = true; });
-
-            try {
-                // 编码: JSON -> String -> Base64
-                // 使用 unescape(encodeURIComponent(...)) 处理中文编码
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify(newLinks, null, 2))));
-
-                const body = {
-                    message: message,
-                    content: content,
-                    sha: fileSha // 如果是第一次创建(fileSha为空)，GitHub会自动处理吗？通常需要小心。
-                                 // 如果文件不存在，不传 sha；如果存在，必须传 sha。
-                };
-                if(fileSha) body.sha = fileSha;
-
-                const res = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    fileSha = data.content.sha; // 更新 SHA
-                    links = newLinks;           // 更新本地数据
-                    render();
-                    closeModal();
-                    alert('✅ 同步成功！');
-                } else {
-                    const err = await res.json();
-                    alert('❌ 同步失败: ' + (err.message || '未知错误'));
-                }
-            } catch (e) {
-                alert('❌ 网络错误');
-                console.error(e);
-            } finally {
-                btns.forEach(b => { b.innerText = '保存同步'; b.disabled = false; });
-            }
-        }
-
-        // 4. 事件处理
-        function commitLink() {
-            const name = document.getElementById('iName').value;
-            let url = document.getElementById('iUrl').value;
-            const icon = document.getElementById('iIcon').value || '🔗';
-
-            if (!name || !url) return alert('请填写名称和网址');
-            if (!url.startsWith('http')) url = 'https://' + url;
-
-            const newLinks = [...links, { name, url, icon }];
-            updateGithub(newLinks, `Add link: ${name}`);
-        }
-
-        function deleteLink(e, idx) {
-            e.preventDefault(); // 阻止点击链接跳转
-            if (confirm('确定要删除这个网站吗？操作将同步到云端。')) {
-                const newLinks = [...links];
-                newLinks.splice(idx, 1);
-                updateGithub(newLinks, `Delete link index ${idx}`);
-            }
-        }
-
-        // 5. Token 和 弹窗控制
-        function saveToken() {
-            const t = document.getElementById('iToken').value.trim();
-            if(t) {
-                localStorage.setItem('gh_token', t);
-                alert('Token 已保存到本地浏览器！');
-                closeTokenModal();
-                loadData(); // 重新加载试试
-            }
-        }
-
-        function openModal() { document.getElementById('modal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('modal').style.display = 'none'; }
-        function openTokenModal() { document.getElementById('tokenModal').style.display = 'flex'; }
-        function closeTokenModal() { document.getElementById('tokenModal').style.display = 'none'; }
-
-        // 时钟
-        setInterval(() => {
-            const d = new Date();
-            const timeStr = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-            document.getElementById('clock').innerText = timeStr;
-        }, 1000);
-
-        // 启动！
-        loadData();
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
+
 </body>
 </html>
