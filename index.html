@@ -3,171 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的主页</title>
+    <title>个人主页 | [你的英文名]</title>
     <style>
-        :root {
-            --bg-color: #1a1a1a;       /* 背景深灰 */
-            --card-bg: #2d2d2d;        /* 卡片浅灰 */
-            --text-color: #e0e0e0;     /* 文字银白 */
-            --accent-color: #4CAF50;   /* 强调色绿色 */
-            --hover-bg: #383838;       /* 悬停高亮 */
-        }
-
+        /* CSS 样式部分 - 控制网页长什么样 */
         body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        /* 1. 时钟样式 */
-        #clock {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            cursor: default;
-        }
-
-        /* 2. 搜索框样式 (默认Google) */
-        .search-container {
-            margin-bottom: 40px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-        
-        input[type="text"] {
-            padding: 15px 25px;
-            width: 300px;
-            max-width: 80%;
-            border-radius: 30px;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            background: var(--card-bg);
-            color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        input[type="text"]:focus {
-            width: 450px;
-            background: #333;
-            box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
-        }
-
-        /* 3. 网站图标网格 */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3列布局 */
-            gap: 20px;
-            width: 100%;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
             max-width: 800px;
-        }
-
-        /* 手机端适配：变2列 */
-        @media (max-width: 600px) {
-            .grid-container { grid-template-columns: repeat(2, 1fr); }
-            #clock { font-size: 2.5rem; }
-        }
-
-        /* 单个卡片 */
-        .card {
-            background-color: var(--card-bg);
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
+            color: #333;
+            background-color: #fff;
+        }
+        header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex; /* 让头像和文字并排 */
             align-items: center;
-            justify-content: center;
-            transition: transform 0.2s, background 0.2s;
-            height: 80px; /* 固定高度 */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            background-color: var(--hover-bg);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* 圆形头像 */
+            object-fit: cover;
+            margin-right: 30px;
+            border: 2px solid #eee;
         }
-
-        .icon {
-            font-size: 28px;
+        .header-content h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        .header-content p {
+            margin: 5px 0;
+            color: #666;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 5px;
+        }
+        .section-content {
+            margin-bottom: 20px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
             margin-bottom: 10px;
         }
-
-        .title {
-            font-size: 14px;
-            font-weight: 500;
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .paper-title {
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #888;
+            text-align: center;
+        }
+        /* 针对手机屏幕的调整 */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="clock">00:00</div>
+    <header>
+        <img src="https://via.placeholder.com/150" alt="Avatar" class="avatar">
+        
+        <div class="header-content">
+            <h1>Your Name (你的中文名)</h1>
+            <p>Ph.D. Student / Researcher (博士生/研究员)</p>
+            <p>Department of Computer Science, University of XXX</p>
+            <p>Email: yourname [at] university.edu</p>
+            <p>
+                <a href="#">[Google Scholar]</a> / 
+                <a href="#">[GitHub]</a> / 
+                <a href="#">[Twitter]</a>
+            </p>
+        </div>
+    </header>
 
-    <div class="search-container">
-        <form action="https://www.google.com/search" method="get" target="_blank">
-            <input type="text" name="q" placeholder="Google Search..." autocomplete="off" autofocus>
-        </form>
+    <section>
+        <h2>About Me (关于我)</h2>
+        <div class="section-content">
+            <p>
+                你好！我是一名正在攻读 [专业名称] 的研究员。我的主要研究兴趣包括 <strong>[研究方向1]</strong>, <strong>[研究方向2]</strong> 以及 <strong>[研究方向3]</strong>。
+            </p>
+            <p>
+                欢迎与我通过邮件交流学术问题。
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <h2>News (最新动态)</h2>
+        <div class="section-content">
+            <ul>
+                <li><strong>[2025.12]</strong> 我们的一篇论文被 CVPR 2026 接收了！</li>
+                <li><strong>[2025.09]</strong> 我加入了 XXX 实验室开始我的科研生涯。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>Publications (发表论文)</h2>
+        <div class="section-content">
+            <ul>
+                <li>
+                    <span class="paper-title">Title of Your First Paper (论文标题)</span><br>
+                    <strong>Your Name</strong>, Co-author Name, Advisor Name.<br>
+                    <em>Conference/Journal Name (发表会议/期刊), Year</em>.<br>
+                    <a href="#">[PDF]</a> <a href="#">[Code]</a>
+                </li>
+                
+                <li>
+                    <span class="paper-title">Title of Your Second Paper</span><br>
+                    Co-author Name, <strong>Your Name</strong>, Advisor Name.<br>
+                    <em>Conference/Journal Name, Year</em>.<br>
+                    <a href="#">[PDF]</a> <a href="#">[Code]</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>Education (教育经历)</h2>
+        <div class="section-content">
+            <ul>
+                <li><strong>University of XXX (某某大学)</strong>, 202X - Present<br>Ph.D. in Computer Science</li>
+                <li><strong>University of YYY (某某大学)</strong>, 201X - 202X<br>B.S. in Computer Science</li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="footer">
+        <p>&copy; 2025 Your Name. Powered by GitHub Pages.</p>
     </div>
-
-    <div class="grid-container">
-
-        <a href="https://gemini.google.com" class="card" target="_blank">
-            <div class="icon">✨</div>
-            <div class="title">Gemini</div>
-        </a>
-
-        <a href="https://www.google.com" class="card" target="_blank">
-            <div class="icon">🌈</div>
-            <div class="title">Google</div>
-        </a>
-
-        <a href="https://www.bing.com" class="card" target="_blank">
-            <div class="icon">🟦</div>
-            <div class="title">Bing</div>
-        </a>
-
-        <a href="https://trustmlatseu.github.io/" class="card" target="_blank">
-            <div class="icon">🎓</div>
-            <div class="title">TrustML 组会</div>
-        </a>
-
-        <a href="https://www.bilibili.com" class="card" target="_blank">
-            <div class="icon">📺</div>
-            <div class="title">Bilibili</div>
-        </a>
-
-        <a href="https://www.zhihu.com" class="card" target="_blank">
-            <div class="icon">📖</div>
-            <div class="title">知乎</div>
-        </a>
-
-    </div>
-
-    <script>
-        // 简单的时钟逻辑
-        function updateClock() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('clock').textContent = `${hours}:${minutes}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
 
 </body>
 </html>
